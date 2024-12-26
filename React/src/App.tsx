@@ -17,11 +17,14 @@ function App(): JSX.Element {
 
   const validateVisibleRows = React.useCallback(() => {
     let dataGrid = grid?.current?.instance;
+    const currentChanges = (dataGrid?.option('editing.changes') as DataGridTypes.DataChange[]).filter((c) => {
+      return Object.keys(c.data).length > 0;
+    });
     const fakeChanges = dataGrid
       ? dataGrid.getVisibleRows().map((row: DataGridTypes.Row): DataGridTypes.DataChange => ({ type: 'update', key: row.key, data: {} }))
       : [];
     // alternatively, you can use the DataGrid|option method to set a new changes array
-    setChanges([...changes, ...fakeChanges]);
+    setChanges([...currentChanges, ...fakeChanges]);
     setClicked(true);
   }, [changes]);
 

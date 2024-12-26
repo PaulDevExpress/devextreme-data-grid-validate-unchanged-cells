@@ -27,10 +27,13 @@ export class AppComponent implements AfterViewChecked {
 
   validateVisibleRows(): void {
     const dataGridInstance = this?.dataGrid?.instance;
+    const currentChanges = (dataGridInstance?.option('editing.changes') as DxDataGridTypes.DataChange[]).filter((c) => {
+      return Object.keys(c.data).length > 0;
+    });
     const fakeChanges = dataGridInstance
       ? dataGridInstance.getVisibleRows().map((row: DxDataGridTypes.Row): DxDataGridTypes.DataChange => ({ type: 'update', key: row.key, data: {} }))
       : [];
-    this.changes = [...this.changes, ...fakeChanges];
+    this.changes = [...currentChanges, ...fakeChanges];
     this.checked = true;
   }
 
